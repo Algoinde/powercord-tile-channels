@@ -123,6 +123,7 @@ module.exports = class TileChannels extends Plugin {
 		inject('alg-channels-compute', NavigableChannels, 'default', (_, res) => {
 			if (!document.getElementById('channels')) return res;
 			setTimeout(() => {
+				if(!document.getElementById('channels')) return;
 				Array.prototype.forEach.call(document.getElementById('channels').querySelectorAll(`.name-23GUGE.overflow-WK9Ogt`), item => {
 					if (!item) return res;
 					if (item.edited) return res;

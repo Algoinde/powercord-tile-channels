@@ -27,28 +27,31 @@ module.exports = class TileChannels extends Plugin {
 		var style = document.createElement('style');
 		style.innerText = `
 #channels .containerDefault--pIXnN {
-		width: 25%;
+	width: 25%;
 }
 
 #channels .containerDefault-3tr_sE {
-		width: 100%;
+	width: 100%;
 }
 
 #channels .content-3YMskv {
-		display: flex;
-		justify-content: flex-start;
-		flex-wrap: wrap;
-		align-content: start;
-		align-items: flex-start;
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	align-content: start;
+	align-items: flex-start;
+}
+#channels .content-3YMskv > div:first-child {
+	width: 100%;
 }
 
 
 #channels .children-3rEycc {
-		display: none;
+	display: none;
 }
 
 #channels .iconContainer-1BBaeJ {
-		display: none;
+	display: none;
 }
 
 #channels a.mainContent-u_9PKf[aria-label*="mention"]:before {
@@ -63,40 +66,46 @@ module.exports = class TileChannels extends Plugin {
 	font-size: 0.9em;
 }
 #channels .mainContent-u_9PKf .name-23GUGE.overflow-WK9Ogt:after {
-		content: attr(data-original);
-		position: absolute;
-		visibility: hidden;
+	content: attr(data-original);
+	position: absolute;
+	visibility: hidden;
 }
 
 #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .unread-2lAfLh {
-		display: none;
+	display: none;
 }
 
 #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .content-1x5b-n {
-		/* background: rgba(0,0,0,0.08); */
-		box-shadow: 0 0 9px 9px #2f3136ff inset, 0 0 0 50px rgba(255,255,255,0.04) inset;
-		/* border-radius: 6px; */
+	/* background: rgba(0,0,0,0.08); */
+	box-shadow: 0 0 9px 9px #2f3136ff inset, 0 0 0 50px rgba(255,255,255,0.04) inset;
+	/* border-radius: 6px; */
 }
 #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .content-1x5b-n:hover {
 		box-shadow: none;
 }
 
 #channels .content-1x5b-n {
-		text-align: center;
-		padding: 0 2px;
+	text-align: center;
+	padding: 0 2px;
 }
 #channels .list-2luk8a.list-SuzGBZ.listDefault-3ir5aS {
-		padding-left: 0;
+	padding-left: 0;
 }
 
 #channels .avatarContainer-28iYmV.avatar-3tNQiO.avatarSmall-1PJoGO {
-		margin-right: -27px;
-		z-index: -1;
-		opacity: 0.3;
+	margin-right: -27px;
+	z-index: -1;
+	opacity: 0.3;
 }
-
+.modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="elysium"],
+.modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="discipl"],
+.modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="committ"],
+.modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="popo-ch"] {
+	box-shadow: 0px 0px 6px 4px rgba(78, 189, 255, 0.21) inset;
+	border-radius: 4px;
+}
 .emoji-negative {
-		text-indent: -4px;
+	text-indent: -4px;
 }
 `;
 
@@ -121,7 +130,7 @@ module.exports = class TileChannels extends Plugin {
 					item.setAttribute('data-original', item.innerText);
 					try {
 						var split = item.innerText.split('-').filter(sp => sp != '').map(s => Array.from(s));
-						if (split[0][0].length > 1) item.classList.add('emoji-negative');
+						if (split[0] && split[0][0] && split[0][0].length > 1) item.classList.add('emoji-negative');
 						else item.classList.remove('emoji-negative');
 						var s = '';
 						switch (true) {

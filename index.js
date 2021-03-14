@@ -46,7 +46,7 @@ module.exports = class TileChannels extends Plugin {
 }
 
 
-#channels .children-3rEycc {
+#channels .children-3rEycc .iconBase-3LOlfs {
 	display: none;
 }
 
@@ -106,6 +106,13 @@ module.exports = class TileChannels extends Plugin {
 }
 .emoji-negative {
 	text-indent: -4px;
+}
+.channel-typing {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-52%) scale(0.9);
+    opacity: 0.8;
 }
 `;
 

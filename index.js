@@ -147,7 +147,7 @@ module.exports = class TileChannels extends Plugin {
 								s = ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][0] : split[0][1]) + split[1][0] + split[2][0] + split[3][0];
 								break;
 							case split.length == 3:
-								s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1]) + split[1][0] + split[2][0];
+								s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1] || '') + split[1][0] + split[2][0];
 								break;
 							case split.length == 2:
 								s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : split[0][1]) + split[1][0] + split[1][1];
@@ -167,7 +167,7 @@ module.exports = class TileChannels extends Plugin {
 			}, 5);
 			return res;
 		})
-
+		NavigableChannels.default.displayName = 'NavigableChannels';
 	}
 
 	pluginWillUnload() {

@@ -93,9 +93,15 @@ module.exports = class TileChannels extends Plugin {
 }
 
 #channels .avatarContainer-28iYmV.avatar-3tNQiO.avatarSmall-1PJoGO {
-	margin-right: -27px;
 	z-index: -1;
-	opacity: 0.3;
+    left: 50%;
+    position: absolute;
+    top: 2px;
+    opacity: 0.3;
+    transform: translateX(-89%);
+}
+.liveIconSpacing-DSnkAT {
+	opacity: 0.8;
 }
 .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="elysium"],
 .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="discipl"],
@@ -115,6 +121,14 @@ module.exports = class TileChannels extends Plugin {
     transform: translateX(-52%) scale(0.9);
     overflow: hidden;
 }
+.list-2luk8a.list-SuzGBZ.listDefault-3ir5aS {
+    margin-right: -8px;
+}
+.content-1Wq3SX {
+    height: 32px;
+    padding: 0 5px;
+}
+.icons-1dXQdz {margin-right: 0;margin-left: 6px;}
 `;
 
 		this.style = document.body.appendChild(style);
@@ -124,9 +138,18 @@ module.exports = class TileChannels extends Plugin {
 		})
 		const NavigableChannels = await getModule(m => m.default && m.default.displayName == 'NavigableChannels');
 
-		inject('alg-channels-rowHeight', channels.default.prototype, 'getHeightForRow', (_, res) => {
-			return res / 4;
+		inject('alg-channels-rowHeight', channels.default.prototype, 'getHeightForRow', function(_, res) {
+			if(typeof this.rowHeight == 'function')
+				return res / 4;
+			else
+				return res;
 		});
+
+		// const ChannelItem = await getModuleByDisplayName('ChannelItem');
+	 //    inject('alg-cha', ChannelItem.prototype, 'render', function (args, res) {
+	 //      console.log(this);
+	 //      return res;
+	 //    });
 
 		inject('alg-channels-compute', NavigableChannels, 'default', (_, res) => {
 			if (!document.getElementById('channels')) return res;
@@ -173,6 +196,7 @@ module.exports = class TileChannels extends Plugin {
 	pluginWillUnload() {
 		uninject('alg-channels-compute');
 		uninject('alg-channels-rowHeight');
+		uninject('alg-cha');
 		document.body.removeChild(this.style);
 	}
 };

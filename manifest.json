@@ -1,6 +1,6 @@
 {
   "name": "TileChannels",
-  "version": "0.1.1",
+  "version": "1.0.1",
   "description": "Displays channels as tiles instead of rows.",
   "author": "Algoinde",
   "license": "MIT"

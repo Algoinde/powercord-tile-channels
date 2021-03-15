@@ -2,6 +2,7 @@ const {
 	Plugin
 } = require('powercord/entities');
 const {
+	React,
 	getModule,
 	getAllModules,
 	getModuleByDisplayName
@@ -10,22 +11,25 @@ const {
 	inject,
 	uninject
 } = require('powercord/injector');
+const {
+	Tooltip
+} = require('powercord/components');
 
 // const Settings = require('./Settings');
 
 module.exports = class TileChannels extends Plugin {
-	constructor() {
-		super();
-	}
+		constructor() {
+			super();
+		}
 
-	async startPlugin() {
-		// powercord.api.settings.registerSettings('alg-channels', {
-		//   category: this.entityID,
-		//   label: 'TileChannels',
-		//   render: Settings
-		// });
-		var style = document.createElement('style');
-		style.innerText = `
+		async startPlugin() {
+			// powercord.api.settings.registerSettings('alg-channels', {
+			//   category: this.entityID,
+			//   label: 'TileChannels',
+			//   render: Settings
+			// });
+			var style = document.createElement('style');
+			style.innerText = `
 #channels .containerDefault--pIXnN {
 	width: 25%;
 }
@@ -66,9 +70,9 @@ module.exports = class TileChannels extends Plugin {
 	font-size: 0.9em;
 }
 #channels .mainContent-u_9PKf .name-23GUGE.overflow-WK9Ogt:after {
-	content: attr(data-original);
 	position: absolute;
 	visibility: hidden;
+	pointer-events: none;
 }
 
 #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .unread-2lAfLh {
@@ -94,11 +98,11 @@ module.exports = class TileChannels extends Plugin {
 
 #channels .avatarContainer-28iYmV.avatar-3tNQiO.avatarSmall-1PJoGO {
 	z-index: -1;
-    left: 50%;
-    position: absolute;
-    top: 2px;
-    opacity: 0.3;
-    transform: translateX(-89%);
+	left: 50%;
+	position: absolute;
+	top: 2px;
+	opacity: 0.3;
+	transform: translateX(-89%);
 }
 .liveIconSpacing-DSnkAT {
 	opacity: 0.8;
@@ -110,93 +114,166 @@ module.exports = class TileChannels extends Plugin {
 	box-shadow: 0px 0px 6px 4px rgba(78, 189, 255, 0.21) inset;
 	border-radius: 4px;
 }
+.mainContent-u_9PKf[aria-label^="🔹"],
+.mainContent-u_9PKf[aria-label^="🔸"],
+.mainContent-u_9PKf[aria-label^="unread, 🔹"],
+.mainContent-u_9PKf[aria-label^="unread, 🔸"],
+.reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+{
+	text-indent: -4px;
+}
+
 .emoji-negative {
 	text-indent: -4px;
 }
 .channel-typing {
-    position: absolute;
-    bottom: -1px;
-    left: 50%;
-    height:12px;
-    transform: translateX(-52%) scale(0.9);
-    overflow: hidden;
+	position: absolute;
+	bottom: -1px;
+	left: 50%;
+	height:12px;
+	transform: translateX(-52%) scale(0.9);
+	overflow: hidden;
 }
 .list-2luk8a.list-SuzGBZ.listDefault-3ir5aS {
-    margin-right: -8px;
+	margin-right: -8px;
 }
 .content-1Wq3SX {
-    height: 32px;
-    padding: 0 5px;
+	height: 32px;
+	padding: 0 5px;
 }
 .icons-1dXQdz {margin-right: 0;margin-left: 6px;}
 `;
 
-		this.style = document.body.appendChild(style);
+			this.style = document.body.appendChild(style);
 
-		const channels = await getModule(function(e) {
-			if (e && e.default && e.default.prototype && e.default.prototype.getHeightForFooter) return true;
-		})
-		const NavigableChannels = await getModule(m => m.default && m.default.displayName == 'NavigableChannels');
+			const channels = await getModule(function(e) {
+				if (e && e.default && e.default.prototype && e.default.prototype.getHeightForFooter) return true;
+			})
+			const NavigableChannels = await getModule(m => m.default && m.default.displayName == 'NavigableChannels');
 
-		inject('alg-channels-rowHeight', channels.default.prototype, 'getHeightForRow', function(_, res) {
-			if(typeof this.rowHeight == 'function')
-				return res / 4;
-			else
-				return res;
-		});
+			inject('alg-channels-rowHeight', channels.default.prototype, 'getHeightForRow', function(_, res) {
+				if (typeof this.rowHeight == 'function')
+					return res / 4;
+				else
+					return res;
+			});
+			this.channelCache = {};
+			this.deep = undefined;
 
-		// const ChannelItem = await getModuleByDisplayName('ChannelItem');
-	 //    inject('alg-cha', ChannelItem.prototype, 'render', function (args, res) {
-	 //      console.log(this);
-	 //      return res;
-	 //    });
+			const ChannelItem = await getModule(m => m.default ?.displayName === 'ChannelItem');
 
-		inject('alg-channels-compute', NavigableChannels, 'default', (_, res) => {
-			if (!document.getElementById('channels')) return res;
-			setTimeout(() => {
-				if(!document.getElementById('channels')) return;
-				Array.prototype.forEach.call(document.getElementById('channels').querySelectorAll(`.name-23GUGE.overflow-WK9Ogt`), item => {
-					if (!item) return res;
-					if (item.edited) return res;
-					item.edited = true;
-					item.setAttribute('data-original', item.innerText);
-					try {
-						var split = item.innerText.split('-').filter(sp => sp != '').map(s => Array.from(s));
-						if (split[0] && split[0][0] && split[0][0].length > 1) item.classList.add('emoji-negative');
-						else item.classList.remove('emoji-negative');
-						var s = '';
-						switch (true) {
-							case split.length == 4:
-								s = ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][0] : split[0][1]) + split[1][0] + split[2][0] + split[3][0];
-								break;
-							case split.length == 3:
-								s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1] || '') + split[1][0] + split[2][0];
-								break;
-							case split.length == 2:
-								s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : split[0][1]) + split[1][0] + split[1][1];
-								break;
-							default:
-								if (split[0] && split[0].length < 5)
-									s = split[0].join('');
-								else
-									s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, 4).join('') || '';
-								break;
-						}
-						item.innerText = s;
-					} catch (e) {
-						console.error('[TileChannels]:', e)
+			//Stores the channel name, fakes it 
+			inject('alg-cha', ChannelItem, 'default', (args, res) => {
+				this.channelCache[args[0].channel.id] = args[0].channel.name;
+				try{
+					name = args[0].channel.name;
+					if (!name) return args;
+					var split = name.split('-').filter(sp => sp != '').map(s => Array.from(s));
+					var s = '';
+					switch (true) {
+						case split.length == 4:
+							s = ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][0] : split[0][1]) + split[1][0] + split[2][0] + split[3][0];
+							break;
+						case split.length == 3:
+							s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1] || '') + split[1][0] + split[2][0];
+							break;
+						case split.length == 2:
+							s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : split[0][1]) + split[1][0] + split[1][1];
+							break;
+						default:
+							if (split[0] && split[0].length < 5)
+								s = split[0].join('');
+							else
+								s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, 4).join('') || '';
+							break;
 					}
-				})
-			}, 5);
-			return res;
-		})
-		NavigableChannels.default.displayName = 'NavigableChannels';
-	}
+					// var tg = args[0].children[0]._owner.return.return.return.type.prototype;
+					// console.log(args[0].children[0]._owner.type.prototype.render)
+					// if (!this.deep) {
+					// 	this.deep = args[0].children[0]._owner.type.prototype;
+					// 	console.log('Injected',args[0].children[0]._owner);
+					// 	inject('alg-yeet', this.deep, 'render', function(args, res) {
+					// 		console.log(res, this);
+					// 		return res;
+					// 	})
+					// }
+					args[0].channel.name = s;
+				} catch (e) {
+					console.error('[TileChannels]:', e)
+				}
+				return args;
+			}, true);
+			ChannelItem.default.displayName = 'ChannelItem';
 
-	pluginWillUnload() {
-		uninject('alg-channels-compute');
-		uninject('alg-channels-rowHeight');
-		uninject('alg-cha');
-		document.body.removeChild(this.style);
-	}
-};
+			//And then puts it back when the channel render is finished. DIRTY.
+			inject('alg-cha-post', ChannelItem, 'default', (args, res) => {
+				args[0].channel.name = this.channelCache[args[0].channel.id];
+				const Popout = React.createElement(Tooltip, {
+					text: args[0].channel.name,
+					position: 'top',
+					color: "primary",
+					delay: 200,
+					disableTooltipPointerEvents: true,
+				}, res)
+				// setTimeout(() => console.log(res), 10)
+				// console.log(res);
+				// console.log(res.props.children.props.children[1].ref.current.__reactInternalInstance$);
+					// res.props.children.props.children[1].props.children[1].props.children[1]._owner.child.child.child.child.child.child.child.child.child.memoizedProps.text = 'YEET';
+				return Popout;
+			});
+
+			ChannelItem.default.displayName = 'ChannelItem';
+
+
+			//Old solution with querySelector, has delay.
+			// 	inject('alg-channels-compute', NavigableChannels, 'default', (_, res) => {
+			// 		if (!document.getElementById('channels')) return res;
+			// 		setTimeout(() => {
+			// 			if (!document.getElementById('channels')) return;
+			// 			Array.prototype.forEach.call(document.getElementById('channels').querySelectorAll(`.name-23GUGE.overflow-WK9Ogt`), item => {
+			// 				if (!item) return res;
+			// 				if (item.edited) return res;
+			// 				item.edited = true;
+			// 				item.setAttribute('data-original', item.innerText);
+			// 				try {
+			// 					var split = item.innerText.split('-').filter(sp => sp != '').map(s => Array.from(s));
+			// 					if (split[0] && split[0][0] && split[0][0].length > 1) item.classList.add('emoji-negative');
+			// 					else item.classList.remove('emoji-negative');
+			// 					var s = '';
+			// 					switch (true) {
+			// 						case split.length == 4:
+			// 							s = ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][0] : split[0][1]) + split[1][0] + split[2][0] + split[3][0];
+			// 							break;
+			// 						case split.length == 3:
+			// 							s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1] || '') + split[1][0] + split[2][0];
+			// 							break;
+			// 						case split.length == 2:
+			// 							s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : split[0][1]) + split[1][0] + split[1][1];
+			// 							break;
+			// 						default:
+			// 							if (split[0] && split[0].length < 5)
+			// 								s = split[0].join('');
+			// 							else
+			// 								s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, 4).join('') || '';
+			// 							break;
+			// 					}
+			// 					item.innerText = s;
+			// 				} catch (e) {
+			// 					console.error('[TileChannels]:', e)
+			// 				}
+			// 			})
+			// 		}, 5);
+			// 		return res;
+			// 	})
+			// 	NavigableChannels.default.displayName = 'NavigableChannels';
+			}
+
+			pluginWillUnload() {
+				// uninject('alg-channels-compute');
+				uninject('alg-channels-rowHeight');
+				uninject('alg-cha');
+				uninject('alg-cha-post');
+				uninject('alg-yeet');
+				document.body.removeChild(this.style);
+			}
+		};

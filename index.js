@@ -143,6 +143,15 @@ module.exports = class TileChannels extends Plugin {
 	padding: 0 5px;
 }
 .icons-1dXQdz {margin-right: 0;margin-left: 6px;}
+.children-3rEycc .ucbadge {
+	background-color: #7289da33 !important;
+    position: absolute;
+    margin: 0;
+    line-height: 1;
+    pointer-events: none;
+    top: -4px;
+    right: -4px;
+}
 `;
 
 			this.style = document.body.appendChild(style);

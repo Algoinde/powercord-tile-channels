@@ -133,6 +133,7 @@ module.exports = class TileChannels extends Plugin {
 	height:12px;
 	transform: translateX(-52%) scale(0.9);
 	overflow: hidden;
+	pointer-events: none;
 }
 .list-2luk8a.list-SuzGBZ.listDefault-3ir5aS {
 	margin-right: -8px;
@@ -153,7 +154,7 @@ module.exports = class TileChannels extends Plugin {
 
 			inject('alg-channels-rowHeight', channels.default.prototype, 'getHeightForRow', function(_, res) {
 				if (typeof this.rowHeight == 'function')
-					return res / 4;
+					return Math.round(res / 4);
 				else
 					return res;
 			});
@@ -187,16 +188,6 @@ module.exports = class TileChannels extends Plugin {
 								s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, 4).join('') || '';
 							break;
 					}
-					// var tg = args[0].children[0]._owner.return.return.return.type.prototype;
-					// console.log(args[0].children[0]._owner.type.prototype.render)
-					// if (!this.deep) {
-					// 	this.deep = args[0].children[0]._owner.type.prototype;
-					// 	console.log('Injected',args[0].children[0]._owner);
-					// 	inject('alg-yeet', this.deep, 'render', function(args, res) {
-					// 		console.log(res, this);
-					// 		return res;
-					// 	})
-					// }
 					args[0].channel.name = s;
 				} catch (e) {
 					console.error('[TileChannels]:', e)
@@ -215,10 +206,6 @@ module.exports = class TileChannels extends Plugin {
 					delay: 200,
 					disableTooltipPointerEvents: true,
 				}, res)
-				// setTimeout(() => console.log(res), 10)
-				// console.log(res);
-				// console.log(res.props.children.props.children[1].ref.current.__reactInternalInstance$);
-					// res.props.children.props.children[1].props.children[1].props.children[1]._owner.child.child.child.child.child.child.child.child.child.memoizedProps.text = 'YEET';
 				return Popout;
 			});
 
@@ -273,7 +260,6 @@ module.exports = class TileChannels extends Plugin {
 				uninject('alg-channels-rowHeight');
 				uninject('alg-cha');
 				uninject('alg-cha-post');
-				uninject('alg-yeet');
 				document.body.removeChild(this.style);
 			}
 		};

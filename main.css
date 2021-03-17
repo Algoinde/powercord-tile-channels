@@ -82,7 +82,7 @@
 
 .tiles #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .content-1x5b-n {
 	/* background: rgba(0,0,0,0.08); */
-	box-shadow: 0 0 9px 9px #2f3136ff inset, 0 0 0 50px rgba(255,255,255,0.04) inset;
+	/*box-shadow: 0 0 9px 9px #2f3136ff inset, 0 0 0 50px rgba(255,255,255,0.04) inset;*/
 	/* border-radius: 6px; */
 }
 .tiles #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .content-1x5b-n:hover {

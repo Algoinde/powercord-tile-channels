@@ -28,7 +28,7 @@ module.exports = class TileChannels extends Plugin {
 		if(this.settings.get('servers') == undefined) {
 			this.settings.set('servers', []);
 		}
-		if(this.settings.get('servers') == undefined) {
+		if(this.settings.get('guildMode') == undefined) {
 			this.settings.set('guildMode', true);
 		}
 	    powercord.api.settings.registerSettings('powercord-tile-channels', {

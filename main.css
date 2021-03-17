@@ -1,5 +1,17 @@
+.tiles.c6 #channels .containerDefault--pIXnN {
+	width: 16.66666666666666666%;
+}
+.tiles.c5 #channels .containerDefault--pIXnN {
+	width: 20%;
+}
 .tiles #channels .containerDefault--pIXnN {
 	width: 25%;
+}
+.tiles.c3 #channels .containerDefault--pIXnN {
+	width: 33.33333333333333333%;
+}
+.tiles.c2 #channels .containerDefault--pIXnN {
+	width: 50%;
 }
 
 .tiles #channels .containerDefault-3tr_sE {
@@ -24,17 +36,39 @@
 .tiles #channels .iconContainer-1BBaeJ {
 	display: none;
 }
-
+/*
 .tiles #channels a.mainContent-u_9PKf[aria-label*="mention"]:before {
 	display: block;
 	border-radius: 4px;
 	box-shadow: 0 0 10px 8px rgba(255,0,0,0.2) inset;
 	pointer-events: none;
+}*/
+
+.tiles #channels .mentionsBadge-3tC7Mi {
+    display: block !important;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 24px;
+    max-width: 60%;
+    line-height: 0;
+    transform: translateX(-50%);
+    height: 1px;
+    font-size: 0;
+    margin-left: 0;
+}
+
+.tiles #channels .mentionsBadge-3tC7Mi .numberBadge-2s8kKX {
+    width: 100% !important;
+    font-size: 0;
+    min-height: 1px;
+    border-radius: 50%;
+    height: 2px;
 }
 
 .tiles #channels .name-23GUGE.overflow-WK9Ogt {
 	text-overflow: clip;
-	font-size: 0.9em;
+	font-size: 15px;
 }
 .tiles #channels .mainContent-u_9PKf .name-23GUGE.overflow-WK9Ogt:after {
 	position: absolute;
@@ -63,6 +97,13 @@
 	padding-left: 0;
 }
 
+.tiles #channels .voiceUser-1K6Xox .username-3KYl0N {
+	text-align: center;
+	color: var(--interactive-hover);
+}
+.tiles #channels .voiceUser-1K6Xox .icons-1dXQdz div:first-child {
+	margin-left:0;
+}
 .tiles #channels .avatarContainer-28iYmV.avatar-3tNQiO.avatarSmall-1PJoGO {
 	z-index: -1;
 	left: 50%;
@@ -71,8 +112,9 @@
 	opacity: 0.3;
 	transform: translateX(-89%);
 }
-.tiles #channels .liveIconSpacing-DSnkAT {
+.tiles #channels .live-vBWnV6 {
 	opacity: 0.8;
+	font-size: 0;
 }
 .tiles #channels .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="elysium"],
 .tiles #channels .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="discipl"],
@@ -100,6 +142,10 @@
 .tiles #channels .icons-1dXQdz {
 	margin-right: 0;
 	margin-left: 6px;
+	position: absolute;
+    top: -1px;
+    right: -1px;
+    transform: scale(0.7);
 }
 
 .tiles #channels .channel-typing {

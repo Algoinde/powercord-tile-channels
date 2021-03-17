@@ -1,6 +1,6 @@
 const { React } = require('powercord/webpack');
 const { getModule } = require('powercord/webpack');
-const { SwitchItem } = require('powercord/components/settings');
+const { SwitchItem, SliderInput } = require('powercord/components/settings');
 
 module.exports = class Settings extends React.Component {
 	constructor (props) {
@@ -8,7 +8,8 @@ module.exports = class Settings extends React.Component {
 
 		const get = props.getSetting;
 		this.state = {
-			guildMode: get('guildMode', {})
+			guildMode: get('guildMode', {}),
+      columns: get('columns', {}),
 		};
 	}
 
@@ -19,7 +20,7 @@ module.exports = class Settings extends React.Component {
 	}
 
 	render () {
-		const { getSetting, toggleSetting, _render } = this.props;
+		const { getSetting, toggleSetting, updateSetting, _render } = this.props;
 		return (
 			<>
 				<SwitchItem note='Use the server menu to enable/disable TileChannels for a specific server.'
@@ -29,6 +30,17 @@ module.exports = class Settings extends React.Component {
 						_render(true);
 					}}
 				>Enable TileChannels on all servers by default</SwitchItem>
+        <SliderInput
+          stickToMarkers
+          initialValue={getSetting('columns', false)}
+          minValue={ 2 }
+          maxValue={ 6 }
+          markers={[ 2, 3, 4, 5, 6 ]}
+          onValueChange={(col) => {
+            updateSetting('columns', col);
+            _render(true);
+          }}
+        >Number of columns</SliderInput>
 			</>
 		);
 	}

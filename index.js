@@ -31,6 +31,9 @@ module.exports = class TileChannels extends Plugin {
 		if(this.settings.get('guildMode') == undefined) {
 			this.settings.set('guildMode', true);
 		}
+		if(this.settings.get('columns') == undefined) {
+			this.settings.set('columns', 4);
+		}
 	    powercord.api.settings.registerSettings('powercord-tile-channels', {
 			category: this.entityID,
 			label: 'TileChannels',
@@ -66,7 +69,7 @@ module.exports = class TileChannels extends Plugin {
 		inject('tile-channels-rowHeight', ScrollObject.default.prototype, 'getHeightForRow', function(_, res) {
 			if(!self.serverMatch) return res;
 			if (typeof this.rowHeight == 'function')
-				return Math.round(res / 4);
+				return Math.round(res / self.settings.get('columns'));
 			else
 				return res;
 		});
@@ -109,13 +112,13 @@ module.exports = class TileChannels extends Plugin {
 						s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1] || '') + split[1][0] + split[2][0];
 						break;
 					case split.length == 2:
-						s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : split[0][1]) + split[1][0] + split[1][1];
+						s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : split[0][1]) + split[1][0] + (this.settings.get('columns')>4?'':split[1][1]);
 						break;
 					default:
 						if (split[0] && split[0].length < 5)
 							s = split[0].join('');
 						else
-							s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, 4).join('') || '';
+							s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, (this.settings.get('columns')>4?3:4)).join('') || '';
 						break;
 				}
 				res.props.children.props.children[1].props.children[0].props.children[1].props.children[0] = s;
@@ -138,11 +141,17 @@ module.exports = class TileChannels extends Plugin {
 
 	_render(redraw) {
 		if(!document.querySelector('.sidebar-2K8pFh')) return;
+	let sidebar = document.querySelector('.sidebar-2K8pFh');
 		this.serverMatch = this._queryServer();
+	let columns = 'c'+this.settings.get('columns');
+	let c = ['c2','c3','c4','c5','c6'];
 		if(this.serverMatch) {
-			document.querySelector('.sidebar-2K8pFh').classList.add('tiles');
+			sidebar.classList.add('tiles');
+			c.forEach(c => {
+				sidebar.classList[(c==columns?'add':'remove')](c);
+			})
 		}else{
-			document.querySelector('.sidebar-2K8pFh').classList.remove('tiles');
+			sidebar.classList.remove('tiles');
 		}
 		if(redraw)forceUpdateElement('.containerDefault--pIXnN', true);
 	}

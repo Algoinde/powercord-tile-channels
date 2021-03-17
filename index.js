@@ -25,6 +25,12 @@ module.exports = class TileChannels extends Plugin {
 	}
 
 	async startPlugin() {
+		if(this.settings.get('servers') == undefined) {
+			this.settings.set('servers', []);
+		}
+		if(this.settings.get('servers') == undefined) {
+			this.settings.set('guildMode', true);
+		}
 	    powercord.api.settings.registerSettings('powercord-tile-channels', {
 			category: this.entityID,
 			label: 'TileChannels',
@@ -34,9 +40,6 @@ module.exports = class TileChannels extends Plugin {
 			})
 		});
 		this.loadStylesheet('./main.css');
-		if(this.settings.get('servers') == undefined) {
-			this.settings.set('servers', []);
-		}
 
 		const ScrollObject = await getModule(m => m && m.default && m.default.prototype && m.default.prototype.getHeightForFooter);
 		const NavigableChannels = await getModule(m => m.default && m.default.displayName == 'NavigableChannels');

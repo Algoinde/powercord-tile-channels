@@ -22,13 +22,13 @@ module.exports = class Settings extends React.Component {
 		const { getSetting, toggleSetting, _render } = this.props;
 		return (
 			<>
-				<SwitchItem note='To enable Tile Channels per-server, use the server menu dropdown.'
+				<SwitchItem note='Use the server menu to enable/disable TileChannels for a specific server.'
 					value={getSetting('guildMode', false)}
 					onChange={() => {
 						toggleSetting('guildMode');
 						_render(true);
 					}}
-				>Disable TileChannels by default</SwitchItem>
+				>Enable TileChannels on all servers by default</SwitchItem>
 			</>
 		);
 	}

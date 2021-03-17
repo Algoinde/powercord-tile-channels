@@ -1,5 +1,5 @@
 # Tile Channels (Powercord plugin)
 
-Displays your channels as tiles in 4 columns. No configurable settings, open an issue if you want something to be toggleable/changable from the Powercord UI.
+Displays your channels as tiles in 4 columns. It is activated on all servers by default. Use settings to change this behavior and use the server menu dropdown to toggle this per-server.
 
-![preview](https://media.discordapp.net/attachments/755005584322854972/820331589963350026/unknown.png)
+![preview](https://media.discordapp.net/attachments/755005584322854972/821712119983505408/TileChannels.png)

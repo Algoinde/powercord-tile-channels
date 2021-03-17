@@ -143,9 +143,10 @@
 	margin-right: 0;
 	margin-left: 0;
 	position: absolute;
-    top: -1px;
-    left: -1px;
+    top: 0px;
+    left: 0px;
     transform: scale(0.7);
+    transform-origin: 0 0;
 }
 
 .tiles #channels .channel-typing {

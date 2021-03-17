@@ -1,0 +1,122 @@
+.tiles #channels .containerDefault--pIXnN {
+	width: 25%;
+}
+
+.tiles #channels .containerDefault-3tr_sE {
+	width: 100%;
+}
+
+.tiles #channels .content-3YMskv {
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	align-content: start;
+	align-items: flex-start;
+}
+.tiles #channels .content-3YMskv > div:first-child {
+	width: 100%;
+}
+
+.tiles #channels .children-3rEycc .iconBase-3LOlfs {
+	display: none;
+}
+
+.tiles #channels .iconContainer-1BBaeJ {
+	display: none;
+}
+
+.tiles #channels a.mainContent-u_9PKf[aria-label*="mention"]:before {
+	display: block;
+	border-radius: 4px;
+	box-shadow: 0 0 10px 8px rgba(255,0,0,0.2) inset;
+	pointer-events: none;
+}
+
+.tiles #channels .name-23GUGE.overflow-WK9Ogt {
+	text-overflow: clip;
+	font-size: 0.9em;
+}
+.tiles #channels .mainContent-u_9PKf .name-23GUGE.overflow-WK9Ogt:after {
+	position: absolute;
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.tiles #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .unread-2lAfLh {
+	display: none;
+}
+
+.tiles #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .content-1x5b-n {
+	/* background: rgba(0,0,0,0.08); */
+	box-shadow: 0 0 9px 9px #2f3136ff inset, 0 0 0 50px rgba(255,255,255,0.04) inset;
+	/* border-radius: 6px; */
+}
+.tiles #channels .iconVisibility-sTNpHs.wrapper-2jXpOf.modeUnread-1qO3K1 .content-1x5b-n:hover {
+		box-shadow: none;
+}
+
+.tiles #channels .content-1x5b-n {
+	text-align: center;
+	padding: 0 2px;
+}
+.tiles #channels .list-2luk8a.list-SuzGBZ.listDefault-3ir5aS {
+	padding-left: 0;
+}
+
+.tiles #channels .avatarContainer-28iYmV.avatar-3tNQiO.avatarSmall-1PJoGO {
+	z-index: -1;
+	left: 50%;
+	position: absolute;
+	top: 2px;
+	opacity: 0.3;
+	transform: translateX(-89%);
+}
+.tiles #channels .liveIconSpacing-DSnkAT {
+	opacity: 0.8;
+}
+.tiles #channels .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="elysium"],
+.tiles #channels .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="discipl"],
+.tiles #channels .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="committ"],
+.tiles #channels .modeUnread-1qO3K1 a.mainContent-u_9PKf[aria-label*="popo-ch"] {
+	box-shadow: 0px 0px 6px 4px rgba(78, 189, 255, 0.21) inset;
+	border-radius: 4px;
+}
+.tiles #channels .mainContent-u_9PKf[aria-label^="🔹"],
+.tiles #channels .mainContent-u_9PKf[aria-label^="🔸"],
+.tiles #channels .mainContent-u_9PKf[aria-label^="unread, 🔹"],
+.tiles #channels .mainContent-u_9PKf[aria-label^="unread, 🔸"],
+.tiles #channels .reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+{
+	text-indent: -4px;
+}
+
+.tiles #channels .list-2luk8a.list-SuzGBZ.listDefault-3ir5aS {
+	margin-right: -8px;
+}
+.tiles #channels .content-1Wq3SX {
+	height: 32px;
+	padding: 0 5px;
+}
+.tiles #channels .icons-1dXQdz {
+	margin-right: 0;
+	margin-left: 6px;
+}
+
+.tiles #channels .channel-typing {
+	position: absolute;
+	bottom: -1px;
+	left: 50%;
+	height:12px;
+	transform: translateX(-52%) scale(0.9);
+	overflow: hidden;
+	pointer-events: none;
+}
+.tiles #channels .children-3rEycc .ucbadge {
+	background-color: #7289da33 !important;
+    position: absolute;
+    margin: 0;
+    line-height: 1;
+    pointer-events: none;
+    top: -4px;
+    right: -4px;
+}

@@ -58,6 +58,15 @@ module.exports = class TileChannels extends Plugin {
 		inject('tile-channels-update', NavigableChannels, 'default', (_, res) => {
 			if(this.currentServer != getGuild.getGuildId()) {
 				this.currentServer = getGuild.getGuildId();
+				if(!this.WidthC.initialized) {
+				let channel = document.querySelector('.containerDefault--pIXnN .content-1x5b-n');
+					if(channel) {
+						this.WidthC.init('15px', getComputedStyle(channel).fontFamily);
+						this.channelWidth = channel.offsetWidth;
+						this.NamesMap = {};
+						console.log('re-init', this);
+					}
+				}
 				this._render();
 			}
 
@@ -85,7 +94,7 @@ module.exports = class TileChannels extends Plugin {
 					color: "colorBrand",
 					checked: this._queryServer(),
 					action: () => {
-						document.querySelector('#guild-header-popout-enable-tile-channels').children[1].children[0].innerHTML = this.checkBocks[this._toggleServer()];
+						document.querySelector('#guild-header-popout-enable-tile-channels svg').outerHTML = this.checkBocks[this._toggleServer()];
 						//I AM VERY SORRY, OKAY?!
 					},
 				});
@@ -102,25 +111,26 @@ module.exports = class TileChannels extends Plugin {
 		let name = res.props.children.props.children[1].props.children[0].props.children[1].props.children[0];
 			try{
 				if (!name) return res;
-				var split = name.split('-').filter(sp => sp != '').map(s => Array.from(s));
-				var s = '';
-				switch (true) {
-					case split.length == 4:
-						s = ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][0] : (split[0][1] || '')) + split[1][0] + split[2][0] + split[3][0];
-						break;
-					case split.length == 3:
-						s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1] || '') + split[1][0] + split[2][0];
-						break;
-					case split.length == 2:
-						s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : (split[0][1] || '')) + split[1][0] + (this.settings.get('columns')>4?'':(split[1][1] || ''));
-						break;
-					default:
-						if (split[0] && split[0].length < 5)
-							s = split[0].join('');
-						else
-							s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, (this.settings.get('columns')>4?3:4)).join('') || '';
-						break;
-				}
+			let s = this._shorten(name, this.channelWidth);
+				// var split = name.split('-').filter(sp => sp != '').map(s => Array.from(s));
+				// var s = '';
+				// switch (true) {
+				// 	case split.length == 4:
+				// 		s = ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][0] : (split[0][1] || '')) + split[1][0] + split[2][0] + split[3][0];
+				// 		break;
+				// 	case split.length == 3:
+				// 		s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? '' : split[0][1] || '') + split[1][0] + split[2][0];
+				// 		break;
+				// 	case split.length == 2:
+				// 		s = split[0][0] + ((/^[\x00-\x7F]*$/.test(split[0][0])) ? split[0][1] + '-' : (split[0][1] || '')) + split[1][0] + (this.settings.get('columns')>4?'':(split[1][1] || ''));
+				// 		break;
+				// 	default:
+				// 		if (split[0] && split[0].length < 5)
+				// 			s = split[0].join('');
+				// 		else
+				// 			s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, (this.settings.get('columns')>4?3:4)).join('') || '';
+				// 		break;
+				// }
 				res.props.children.props.children[1].props.children[0].props.children[1].props.children[0] = s;
 			} catch (e) {
 				console.error('[TileChannels]:', e)
@@ -136,8 +146,99 @@ module.exports = class TileChannels extends Plugin {
 			return Popout;
 		});
 		ChannelItem.default.displayName = 'ChannelItem';
+
+		function WidthComputer() {
+			if(!this.charContainer) {
+				this.charContainer = document.createElement('div');
+				this.charContainer.style = 'position: absolute; visibility: hidden; display: inline-block; padding-right: 0px';
+				this.charContainer.style.fontSize = '15px';
+				this.charContainer.style.fontFamily = 'Whitney,Helvetica Neue,Helvetica,Arial,sans-serif';
+				this.charContainer.style.fontWeight = '500';
+				this.charContainer.initialized = false;
+				this.charContainer = document.body.appendChild(this.charContainer);
+			}
+			if(!this.map) {
+				this.map = new Map();
+			}
+			this.getWidth = ch => {
+				if(this.map.has(ch))
+					return this.map.get(ch);
+
+				this.charContainer.innerText = ch;
+				this.map.set(ch, this.charContainer.offsetWidth);
+				return this.charContainer.offsetWidth + 1;
+			}
+			this.init = (fontSize, fontFamily) => {
+				this.charContainer.style.fontSize = fontSize;
+				this.charContainer.style.fontFamily = fontFamily;
+				this.map = new Map();
+				this.initialized = true;
+				this.dash = this.getWidth('-');
+			}
+			this.dash = this.getWidth('-');
+
+			this.destroy = () => {
+				this.charContainer.parentNode.removeChild(this.charContainer);
+				delete this.charContainer;
+			}
+		}
+
+		this.WidthC = new WidthComputer();
+		this.NamesMap = {};
 	}
 
+	_shorten(name, maxWidth = 22) {
+		if(this.NamesMap[maxWidth] && this.NamesMap[maxWidth][name])
+			return this.NamesMap[maxWidth][name];
+
+		if(this.settings.get('columns') < 5) {
+			maxWidth -= 10 * (5 - this.settings.get('columns'));
+		}
+	let split = name.split('-');
+	let s = split.map(part => Array.from(part));
+	let dashW = this.WidthC.dash * (s.length - 1);
+	let	shortArray = split.map(a => []);
+	let	longest = Math.max(...split.map(a => a.length));
+	let pattern = [...Array(s.length).keys()];
+		pattern.unshift(pattern.pop());
+
+		shortArray[0].push(s[0][0]);
+	let totalWidth = this.WidthC.getWidth(s[0][0]);
+
+		for(i = s.length - 1; i > 0; i--) {
+		let character = s[i][0];
+		var width = this.WidthC.getWidth(character);
+			if(totalWidth + width + dashW >= maxWidth) break; else totalWidth += width;
+			shortArray[i].push(character);
+		}
+
+	let currentOffset = 1;
+	var width = 0;
+		while(true) {
+			if(totalWidth + width + dashW >= maxWidth) break;
+			if(currentOffset > longest - 1) break;
+			for(var i = 0; i<pattern.length; i++) {
+				let part = pattern[i];
+				let character = s[part][currentOffset];
+				if(character != undefined) {
+					width = this.WidthC.getWidth(character);
+					if(totalWidth + width + dashW >= maxWidth) break; else totalWidth += width;
+					shortArray[part].push(character);
+				};
+			}
+			currentOffset++;
+		}
+		let re = shortArray.map(a => a.join('')).filter(a => a != '');
+
+		if(!this.NamesMap[maxWidth]) this.NamesMap[maxWidth] = {};
+
+		if(Math.max(...re.map(a => a.length)) < 2) {
+			this.NamesMap[maxWidth][name] = re.join('');
+		}else{
+			this.NamesMap[maxWidth][name] = re.join('-');
+		}
+		return this.NamesMap[maxWidth][name];
+	}
 
 	_render(redraw) {
 		if(!document.querySelector('.sidebar-2K8pFh')) return;
@@ -153,7 +254,12 @@ module.exports = class TileChannels extends Plugin {
 		}else{
 			sidebar.classList.remove('tiles');
 		}
-		if(redraw)forceUpdateElement('.containerDefault--pIXnN', true);
+	let channel = document.querySelector('.containerDefault--pIXnN .content-1x5b-n');
+		if(channel)
+			this.channelWidth = channel.offsetWidth;
+		if(redraw) {
+			forceUpdateElement('.containerDefault--pIXnN', true);
+		}
 	}
 
 	_toggleServer(state) {
@@ -181,5 +287,6 @@ module.exports = class TileChannels extends Plugin {
 		uninject('tile-channels-rowHeight');
 		uninject('tile-channels-rename');
 		uninject('tile-channels-update');
+		this.WidthC.destroy();
 	}
 };

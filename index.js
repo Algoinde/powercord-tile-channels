@@ -99,7 +99,7 @@ module.exports = class TileChannels extends Plugin {
 
 		inject('tile-channels-rename', ChannelItem, 'default', (args, res) => {
 			if(!this.serverMatch) return res;
-		let name = res.props.children.props.children[1].props.children[0].props.children[1].props.children[0];
+		let name =  res.props.children.props.children[1].props.children[0].props.children[1].props.children[0].props.children;
 			try{
 				if (!name) return res;
 				var split = name.split('-').filter(sp => sp != '').map(s => Array.from(s));
@@ -121,7 +121,7 @@ module.exports = class TileChannels extends Plugin {
 							s = (split[0] || []).filter((ch, index) => !(/[aeiou]/.test(ch) && index > 0)).slice(0, (this.settings.get('columns')>4?3:4)).join('') || '';
 						break;
 				}
-				res.props.children.props.children[1].props.children[0].props.children[1].props.children[0] = s;
+				res.props.children.props.children[1].props.children[0].props.children[1].props.children[0].props.children = s;
 			} catch (e) {
 				console.error('[TileChannels]:', e)
 			}

@@ -191,8 +191,8 @@ module.exports = class TileChannels extends Plugin {
 		if(this.NamesMap[maxWidth] && this.NamesMap[maxWidth][name])
 			return this.NamesMap[maxWidth][name];
 
-		if(this.settings.get('columns') < 5) {
-			maxWidth -= 10 * (5 - this.settings.get('columns'));
+		if(this.settings.get('columns') < 6) {
+			maxWidth -= 5 * (6 - this.settings.get('columns'));
 		}
 	let split = name.split('-');
 	let s = split.map(part => Array.from(part));

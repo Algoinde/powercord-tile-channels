@@ -32,8 +32,9 @@ export async function start(): Promise<void> {
 
 
   inject.after(ChannelItem, "Z", (_, res) => {
-    let name = util.findInReactTree(res, (e) => e?.props?.channel?.name).props.channel.name;
     try {
+
+    let name = util.findInReactTree(res, (e) => e?.props?.channel?.name).props.channel.name;
       if (!name) return;
       let split = name
         .split("-")

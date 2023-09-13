@@ -1,7 +1,27 @@
 {
+  "id": "dev.Algoinde.TileChannels",
   "name": "TileChannels",
-  "version": "1.2.0",
   "description": "Displays channels as tiles instead of rows.",
-  "author": "Algoinde",
-  "license": "MIT"
+  "author": [
+    {
+    "name": "Wolfie",
+    "discordID": "347096063569559553",
+    "github": "Wolfkid200444"
+  },
+  {
+    "name": "Algoinde",
+    "discordID": "142949518680391680",
+    "github": "Algoinde"
+  }
+  ],
+  "version": "1.0.0",
+  "updater": {
+    "type": "github",
+    "id": "Algoinde/powercord-tile-channels"
+  },
+  "license": "MIT",
+  "type": "replugged-plugin",
+  "renderer": "src/index.ts",
+  "source": "https://github.com/Algoinde/powercord-tile-channels/tree/rework?tab=readme-ov-file",
+  "image": ["https://media.discordapp.net/attachments/755005584322854972/821712119983505408/TileChannels.png"]
 }
